@@ -1,4 +1,5 @@
-import React, { memo } from "react";
+import React from "react";
+import { useDrop } from "react-dnd";
 import Card from "./Card";
 
 const List = ({
@@ -20,35 +21,41 @@ const List = ({
   handleCardTextBlur,
   handleCardTextKeyDown,
 }) => {
+  const [, drop] = useDrop({
+    accept: "CARD",
+    drop: (item, monitor) => {
+      if (!monitor.didDrop()) {
+        moveCard(item.cardId, item.listId, list.id, item.index);
+      }
+    },
+  });
+
   return (
-    <div className="bg-white rounded shadow p-4 m-2 w-64">
+    <div ref={drop} className="bg-gray-200 rounded p-4 m-2 w-64">
       {editingListId === list.id ? (
         <input
-          type="text"
           value={newTitle}
           onChange={handleTitleChange}
           onBlur={() => handleTitleBlur(list.id)}
           onKeyDown={(e) => handleTitleKeyDown(e, list.id)}
           autoFocus
-          className="font-bold text-lg mb-4 w-full p-1 border"
         />
       ) : (
-        <h2
-          className="font-bold text-lg mb-4 cursor-pointer"
-          onClick={() => {
+        <div
+          onDoubleClick={() => {
             setEditingListId(list.id);
             setNewTitle(list.title);
           }}
         >
           {list.title}
-        </h2>
+        </div>
       )}
       {list.cards.map((card, index) => (
         <Card
           key={card.id}
           card={card}
-          index={index}
           listId={list.id}
+          index={index}
           moveCard={moveCard}
           editingCardId={editingCardId}
           setEditingCardId={setEditingCardId}
@@ -59,14 +66,11 @@ const List = ({
           handleCardTextKeyDown={handleCardTextKeyDown}
         />
       ))}
-      <div
-        className="bg-gray-200 p-2 rounded mt-2 cursor-pointer"
-        onClick={() => addCard(list.id)}
-      >
-        + Add a card
+      <div onClick={() => addCard(list.id)} className="mt-2 cursor-pointer">
+        + Add another card
       </div>
     </div>
   );
 };
 
-export default memo(List);
+export default List;

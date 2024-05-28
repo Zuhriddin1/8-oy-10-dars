@@ -2,7 +2,6 @@ import React, { useState, useCallback } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import List from "./components/List";
-import { ItemType } from "./constants/itemType";
 
 const App = () => {
   const [lists, setLists] = useState([
@@ -93,6 +92,7 @@ const App = () => {
     },
     [newTitle]
   );
+
   const handleTitleKeyDown = useCallback(
     (e, listId) => {
       if (e.key === "Enter") {
@@ -134,6 +134,7 @@ const App = () => {
     },
     [handleCardTextBlur]
   );
+
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="flex flex-wrap p-4">
@@ -169,4 +170,5 @@ const App = () => {
     </DndProvider>
   );
 };
+
 export default App;
