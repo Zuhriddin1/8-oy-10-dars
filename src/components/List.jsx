@@ -1,7 +1,5 @@
-import React from "react";
 import { useDrop } from "react-dnd";
 import Card from "./Card";
-
 const List = ({
   list,
   addCard,
@@ -29,7 +27,6 @@ const List = ({
       }
     },
   });
-
   return (
     <div ref={drop} className="bg-gray-200 rounded p-4 m-2 w-64">
       {editingListId === list.id ? (
